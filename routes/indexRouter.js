@@ -11,4 +11,6 @@ indexRouter.get("/index", (req, res) => {
   console.log(query);
 });
 
+
+
 module.exports = indexRouter;

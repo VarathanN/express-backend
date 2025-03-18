@@ -24,3 +24,13 @@ const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`server is up and running in ${PORT}`);
 });
+
+app.get("/error-next", (req, res, next) => {
+  const error = new Error("Something went wrong!");
+  next(error); // Pass error to next middleware
+});
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).send(err);
+});
