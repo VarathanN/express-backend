@@ -1,5 +1,6 @@
 const db = require("../db");
-const asyncHandler = require("express-async-handler")
+const asyncHandler = require("express-async-handler");
+const CustomerNotFoundError = require("../errors/CustomerNotFoundError");
 
 const getAuthorById =  asyncHandler(async (req, res) => {
   const { authorId } = req.params;
@@ -7,8 +8,7 @@ const getAuthorById =  asyncHandler(async (req, res) => {
   const author = await db.getAuthorById(Number(authorId));
 
   if (!author) {
-    res.status(404).send("<h1>Author not found</h1>");
-    return;
+    throw new CustomerNotFoundError("Author not found");
   }
 
   res.send(`<h1>Author Name: ${author.name}</h1>`);

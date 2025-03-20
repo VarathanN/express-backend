@@ -4,6 +4,34 @@ const authorRouter = require("./routes/authorRouter");
 const bookRouter = require("./routes/bookRouter");
 const indexRouter = require("./routes/indexRouter");
 
+app.get("/error-next", (req, res, next) => {
+  const error = new Error("Something went wrong!");
+  next(error); // Pass error to next middleware
+});
+
+// middlewares
+// function middleware1(req, res, next) {
+//   console.log("Middleware 1");
+//   next(); // Pass control to the next middleware
+// }
+
+// function middleware2(req, res, next) {
+//   console.log("Middleware 2");
+//   // res.send("Response from Middleware 2");
+//   next();
+//   // request-response cycle ends here
+// }
+
+// function middleware3(req, res, next) {
+//   console.log("Middleware 3");
+//   res.send("Response from Middleware 3");
+// }
+
+// app.use(middleware1);
+// app.use(middleware2);
+// app.use(middleware3);
+// // will log `Middleware 1` -> `Middleware 2` and send a response with the text "Response from Middleware 2"
+
 app.use("/authors", authorRouter);
 app.use("/books", bookRouter);
 app.use("/", indexRouter);
@@ -25,12 +53,7 @@ app.listen(PORT, () => {
   console.log(`server is up and running in ${PORT}`);
 });
 
-app.get("/error-next", (req, res, next) => {
-  const error = new Error("Something went wrong!");
-  next(error); // Pass error to next middleware
-});
-
 app.use((err, req, res, next) => {
   console.error(err);
-  res.status(500).send(err);
+  res.status(err.statusCode || 500).send(err.message);
 });
